@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -12,9 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Expense } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { Plus, Trash2 } from "lucide-react";
-
-<lov-add-dependency>uuid@latest</lov-add-dependency>
-<lov-add-dependency>@types/uuid@latest</lov-add-dependency>
 
 const CreateReceipt = () => {
   const navigate = useNavigate();
@@ -33,7 +29,6 @@ const CreateReceipt = () => {
     { id: uuidv4(), name: "FASTag", amount: 0 },
   ]);
   
-  // Calculate derived values
   const parsedQuantity = parseInt(quantity) || 0;
   const parsedUnitPrice = parseCurrency(unitPrice) || 0;
   const totalRent = parsedQuantity * parsedUnitPrice;
@@ -43,12 +38,10 @@ const CreateReceipt = () => {
   const remainingAmount = parsedAdvanceAmount - totalExpenses;
   const balanceAmount = totalRent - parsedAdvanceAmount;
   
-  // Set receipt number on component mount
   useEffect(() => {
     setReceiptNumber(getLastReceiptNumber());
   }, [getLastReceiptNumber]);
   
-  // Handle expense amount change
   const handleExpenseAmountChange = (id: string, value: string) => {
     setExpenses(prevExpenses =>
       prevExpenses.map(expense =>
@@ -59,7 +52,6 @@ const CreateReceipt = () => {
     );
   };
   
-  // Add new expense
   const handleAddExpense = () => {
     setExpenses(prev => [...prev, {
       id: uuidv4(),
@@ -68,12 +60,10 @@ const CreateReceipt = () => {
     }]);
   };
   
-  // Remove expense
   const handleRemoveExpense = (id: string) => {
     setExpenses(prev => prev.filter(expense => expense.id !== id));
   };
   
-  // Update expense name
   const handleExpenseNameChange = (id: string, name: string) => {
     setExpenses(prev =>
       prev.map(expense =>
@@ -82,9 +72,7 @@ const CreateReceipt = () => {
     );
   };
   
-  // Handle form submission
   const handleSubmit = () => {
-    // Validate form
     if (!transporterName) {
       toast({
         title: "Error",
@@ -103,10 +91,8 @@ const CreateReceipt = () => {
       return;
     }
     
-    // Filter out expenses with empty names
     const validExpenses = expenses.filter(exp => exp.name.trim() !== "");
     
-    // Create receipt object
     const newReceipt = {
       id: uuidv4(),
       date,
@@ -123,7 +109,6 @@ const CreateReceipt = () => {
       status: "pending" as const
     };
     
-    // Add receipt to context
     addReceipt(newReceipt);
     
     toast({
@@ -131,7 +116,6 @@ const CreateReceipt = () => {
       description: "Receipt has been successfully created",
     });
     
-    // Navigate to view receipt
     navigate(`/receipt/${newReceipt.id}`);
   };
   
@@ -141,7 +125,6 @@ const CreateReceipt = () => {
       
       <div className="container mx-auto px-4 py-6 pb-20">
         <Card className="p-5">
-          {/* Receipt Header */}
           <div className="flex justify-between mb-6">
             <div>
               <Label htmlFor="date">Date</Label>
@@ -163,7 +146,6 @@ const CreateReceipt = () => {
             </div>
           </div>
           
-          {/* Total Rent Display */}
           <div className="bg-primary text-white p-3 rounded-md mb-6">
             <div className="text-sm">Total Rent</div>
             <div className="text-2xl font-bold">
@@ -171,7 +153,6 @@ const CreateReceipt = () => {
             </div>
           </div>
           
-          {/* Main Form Fields */}
           <div className="space-y-4 mb-6">
             <div>
               <Label htmlFor="transporterName">Transporter Name</Label>
@@ -227,7 +208,6 @@ const CreateReceipt = () => {
             </div>
           </div>
           
-          {/* Expenses Section */}
           <div className="bg-gray-50 p-4 rounded-lg mb-6">
             <h3 className="font-medium mb-3">Expenses</h3>
             
@@ -239,7 +219,7 @@ const CreateReceipt = () => {
                       value={expense.name}
                       onChange={(e) => handleExpenseNameChange(expense.id, e.target.value)}
                       placeholder="Expense name"
-                      readOnly={index < 3} // First three expenses are fixed
+                      readOnly={index < 3}
                     />
                   </div>
                   <div className="w-1/3">
@@ -279,7 +259,6 @@ const CreateReceipt = () => {
             </div>
           </div>
           
-          {/* Calculations */}
           <div className="space-y-3 mb-6">
             <div className="flex justify-between items-center bg-blue-50 p-3 rounded-lg">
               <span className="font-medium">Remaining Amount:</span>
@@ -296,7 +275,6 @@ const CreateReceipt = () => {
             </div>
           </div>
           
-          {/* Submit Button */}
           <Button
             size="lg"
             onClick={handleSubmit}
