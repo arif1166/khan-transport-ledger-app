@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, PlusCircle, Calendar } from "lucide-react";
@@ -24,7 +23,7 @@ const Index = () => {
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header title="KHAN TRANSPORT" />
       
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-6 relative">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <Card className="border-l-4 border-l-green-500">
@@ -110,14 +109,16 @@ const Index = () => {
           )}
         </div>
         
-        {/* Create Receipt Button */}
-        <Button
-          size="lg"
-          onClick={() => navigate('/create-receipt')}
-          className="fixed bottom-6 right-6 rounded-full shadow-lg w-14 h-14 p-0"
-        >
-          <PlusCircle size={24} />
-        </Button>
+        {/* Create Receipt Button - Positioned at bottom middle */}
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+          <Button
+            size="lg"
+            onClick={() => navigate('/create-receipt')}
+            className="rounded-full shadow-lg w-14 h-14 p-0"
+          >
+            <PlusCircle size={24} />
+          </Button>
+        </div>
       </div>
     </div>
   );
