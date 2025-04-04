@@ -7,7 +7,7 @@ import { downloadPDF, sharePDF } from "@/lib/pdfGenerator";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Download, Share } from "lucide-react";
+import { Download, Share, CheckCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Receipt } from "@/types";
 
@@ -15,7 +15,7 @@ const ViewReceipt = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { getReceiptById } = useReceipts();
+  const { getReceiptById, updateReceiptStatus } = useReceipts();
   const [receipt, setReceipt] = useState<Receipt | null>(null);
 
   useEffect(() => {
@@ -48,6 +48,17 @@ const ViewReceipt = () => {
 
   const handleDownload = () => {
     downloadPDF(receipt);
+  };
+
+  const handleMarkAsPaid = () => {
+    if (id) {
+      updateReceiptStatus(id, "paid");
+      setReceipt(prev => prev ? { ...prev, status: "paid" } : null);
+      toast({
+        title: "Status updated",
+        description: "Receipt has been marked as paid",
+      });
+    }
   };
 
   return (
@@ -133,7 +144,17 @@ const ViewReceipt = () => {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {receipt.status === "pending" && (
+            <Button 
+              onClick={handleMarkAsPaid}
+              variant="default"
+              className="flex items-center justify-center bg-green-600 hover:bg-green-700"
+            >
+              <CheckCircle className="mr-2 h-4 w-4" />
+              Mark as Paid
+            </Button>
+          )}
           <Button 
             onClick={handleShare}
             variant="outline"

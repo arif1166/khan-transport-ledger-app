@@ -9,6 +9,7 @@ interface ReceiptContextType {
   getLastReceiptNumber: () => string;
   getSummary: () => DashboardSummary;
   searchReceipts: (query: string, dateQuery?: string) => Receipt[];
+  updateReceiptStatus: (id: string, status: 'pending' | 'paid') => void;
 }
 
 const ReceiptContext = createContext<ReceiptContextType | undefined>(undefined);
@@ -89,13 +90,22 @@ export const ReceiptProvider = ({ children }: ReceiptProviderProps) => {
     });
   };
 
+  const updateReceiptStatus = (id: string, status: 'pending' | 'paid') => {
+    setReceipts((prevReceipts) => 
+      prevReceipts.map((receipt) => 
+        receipt.id === id ? { ...receipt, status } : receipt
+      )
+    );
+  };
+
   const value = {
     receipts,
     addReceipt,
     getReceiptById,
     getLastReceiptNumber,
     getSummary,
-    searchReceipts
+    searchReceipts,
+    updateReceiptStatus
   };
 
   return <ReceiptContext.Provider value={value}>{children}</ReceiptContext.Provider>;
