@@ -68,12 +68,12 @@ export const ReceiptProvider = ({ children }: ReceiptProviderProps) => {
 
     receipts.forEach((receipt) => {
       if (receipt.status === "paid") {
-        totalReceived += receipt.advanceAmount;
+        // For paid receipts, add the remaining amount to totalReceived
+        totalReceived += receipt.remainingAmount;
       } else {
+        // For pending receipts, add the balance amount to totalPending
         totalPending += receipt.balanceAmount;
       }
-      // Always add advance amount to received
-      totalReceived += receipt.advanceAmount;
     });
 
     return {
